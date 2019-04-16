@@ -21,9 +21,16 @@ function EmotionAnalysis() {
 function Result(props) {
     return (
         <div>
-            <h1>{props.result < 100 ? props.result + "%" : "Game Over!"}</h1>
+            <h2>{"Happiness: " + props.result['happiness'] + "%"}</h2>
+            <h2>{"Sadness: " + props.result['sadness'] + "%"}</h2>
+            <h2>{"Fear: " + props.result['fear'] + "%"}</h2>
+            <h2>{"Disgust: " + props.result['disgust'] + "%"}</h2>
+            <h2>{"Anger: " + props.result['anger'] + "%"}</h2>
+            <h2>{"Surprise: " + props.result['surprise'] + "%"}</h2>
+            <h2>{"Neutral: " + props.result['neutral'] + "%"}</h2>
         </div>
-    )
+        
+    );
 }
 
 export default EmotionAnalysis

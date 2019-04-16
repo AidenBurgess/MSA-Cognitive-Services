@@ -19,7 +19,13 @@ class MyWebcam extends React.Component {
             const image = this.webcam.getScreenshot();
             const byteArrayImage = this.convertToByteArray(image);
             this.fetchData(byteArrayImage);
-        }, 200);
+        }, 1000);
+    }
+
+    stopCapturing = () => {
+        this.isCapturing = false;
+        clearInterval(this.timerId);
+        this.props.onReceivedResult(0);
     }
 
     convertToByteArray = (image) => {
@@ -39,14 +45,15 @@ class MyWebcam extends React.Component {
         }).then(response => {
             if (response.ok) {
                 response.json().then(data => {
-                    var happiness = (data[0] != null ? data[0].faceAttributes.emotion.happiness : 0);
-                    happiness = (Math.round(happiness * 100))
-                    if (this.isCapturing && happiness < 100) {
-                        this.props.onReceivedResult(happiness);
+                    var emotions = (data[0] != null ? data[0].faceAttributes.emotion : 0);
+                    for (var index in emotions) {
+                        emotions[index] = Math.round(emotions[index] * 100)
+                    }
+                    console.log(emotions);
+                    if (this.isCapturing) {
+                        this.props.onReceivedResult(emotions);
                     } else {
-                        clearInterval(this.timerId);
-                        this.isCapturing = false;
-                        this.props.onReceivedResult(100);
+                        this.props.onReceivedResult(0);
                     }
                 })
             }
@@ -74,7 +81,8 @@ class MyWebcam extends React.Component {
                     videoConstraints = {videoConstraints}
                 />
             </div>
-                <button variant = "primary" onClick = {this.startCapturing}>Start Recording</button>
+                <button className = "button primary" onClick = {this.startCapturing}>Start Recording</button>
+                <button className = "button secondary" onClick = {this.stopCapturing}>Stop Recording</button>
             </div>
         )
     }

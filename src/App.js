@@ -6,7 +6,7 @@ import './components/stylesheet.css'
 import EmotionAnalysis from './components/EmotionAnalysis'
 
 
-class App extends Component {
+export default class App extends Component {
   constructor() {
     super()
     this.state = {
@@ -24,10 +24,14 @@ class App extends Component {
   render() {
     return (
     <div>
+      <div className= "header">
       <Title title = {'Record your Emotions'}/>
+      </div>
+      <div className = "video">
       <AddVideo onAddVideo = {(addedPost) => {
         this.addVideo(addedPost)
       }} />
+      </div>
       <div className = "video-wrapper">
         <Displayer posts = {this.state.posts}/>
       </div>
@@ -42,4 +46,4 @@ class App extends Component {
   }
 }
 
-export default App;
+// export default App;

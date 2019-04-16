@@ -23,7 +23,7 @@ class AddVideo extends Component {
                 <div className = "form">
                     <form onSubmit = {this.handleSubmit}>
                         <input type = "text" placeholder = "Link" name = "link"/>
-                        <button> Play </button>
+                        <button className = "button primary"> Play </button>
                     </form>
                 </div>
             </h1>
