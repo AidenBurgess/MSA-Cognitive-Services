@@ -6,12 +6,24 @@ class MyWebcam extends React.Component {
         super(props)
         this.timerId = null;
         this.isCapturing = false;
+        this.emotions  = {'happiness': 0, 'sadness':0, 'contempt': 0, 'disgust': 0, 'fear': 0,
+        'neutral': 0, 'surprise': 0, 'anger': 0 };
+    }
+
+    updateEmotions = (data) => {
+        var temp = this.emotions
+        this.emotions = (data[0] != null ? data[0].faceAttributes.emotion : 0);
+        for (var index in this.emotions) {
+            this.emotions[index] = Math.round(this.emotions[index] * 100);
+        };
+        if (typeof this.emotions['happiness'] == 'undefined') {
+            this.emotions = temp;
+        }
     }
 
     setRef = webcam => {
         this.webcam = webcam;
     }
-
 
     startCapturing = () => {
         this.isCapturing = true;
@@ -19,13 +31,12 @@ class MyWebcam extends React.Component {
             const image = this.webcam.getScreenshot();
             const byteArrayImage = this.convertToByteArray(image);
             this.fetchData(byteArrayImage);
-        }, 1000);
+        }, 300);
     }
 
     stopCapturing = () => {
         this.isCapturing = false;
         clearInterval(this.timerId);
-        this.props.onReceivedResult(0);
     }
 
     convertToByteArray = (image) => {
@@ -45,15 +56,11 @@ class MyWebcam extends React.Component {
         }).then(response => {
             if (response.ok) {
                 response.json().then(data => {
-                    var emotions = (data[0] != null ? data[0].faceAttributes.emotion : 0);
-                    for (var index in emotions) {
-                        emotions[index] = Math.round(emotions[index] * 100)
-                    }
-                    console.log(emotions);
+                    this.updateEmotions(data);
                     if (this.isCapturing) {
-                        this.props.onReceivedResult(emotions);
+                        this.props.onReceivedResult(this.emotions)
                     } else {
-                        this.props.onReceivedResult(0);
+                        this.props.onReceivedResult(this.emotions);
                     }
                 })
             }
