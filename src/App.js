@@ -1,26 +1,43 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import Title from './components/Title'
+import Displayer from './components/Displayer'
+import AddVideo from './components/AddVideo'
+import './components/stylesheet.css'
+import EmotionAnalysis from './components/EmotionAnalysis'
+
 
 class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      posts:[{
+        videoLink: ""
+      }]
+    }
+  }
+  addVideo(postSubmitted) {
+    this.setState(state => ({
+      posts: [postSubmitted]
+    }))
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+    <div>
+      <Title title = {'Record your Emotions'}/>
+      <AddVideo onAddVideo = {(addedPost) => {
+        this.addVideo(addedPost)
+      }} />
+      <div className = "video-wrapper">
+        <Displayer posts = {this.state.posts}/>
       </div>
+      <h1 style = {{
+        position: 'fixed',
+        bottom: '0',
+        right: '0',}}>
+        <EmotionAnalysis/>
+        </h1>
+    </div>
     );
   }
 }
